@@ -55,9 +55,15 @@ Welcome to **Domeme**, the platform that fuses meme culture, crypto energy, and 
 
 ---
 
+## 🧩 Environment Setup (.env)
+
+- DOMA_API_KEY='your-doma-api-key'
+- DOMA_SUBGRAPH_API_URL='https://api-testnet.doma.xyz/graphql''
+
 ## 🚀 Why Domeme?
 
 **Domeme is more than a meme domain tracker — it’s a creative playground powered by blockchain, AI, and community hype.**  
 Whether you’re a domain hunter, meme lover, or crypto builder, Domeme lets you spot and boost the next viral idea _before_ it explodes.
 
 > **Ready to set trends? Start exploring — and let your meme energy shape the web!**
+
