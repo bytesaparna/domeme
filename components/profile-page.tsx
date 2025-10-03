@@ -153,19 +153,19 @@ export default function ProfilePage() {
                             <TabsList className="mb-6 w-full bg-slate-800/50 p-1">
                                 <TabsTrigger
                                     value="overview"
-                                    className="flex-1 data-[state=active]:bg-gradient-to-r data-[state=active]:from-white data-[state=active]:to-purple-600"
+                                    className="flex-1 data-[state=active]:bg-gradient-to-r data-[state=active]:from-white data-[state=active]:to-purple-600 z-50"
                                 >
                                     Overview
                                 </TabsTrigger>
                                 <TabsTrigger
                                     value="domains"
-                                    className="flex-1 data-[state=active]:bg-gradient-to-r data-[state=active]:from-white data-[state=active]:to-purple-600"
+                                    className="flex-1 data-[state=active]:bg-gradient-to-r data-[state=active]:from-white data-[state=active]:to-purple-600 z-50"
                                 >
                                     My Domains
                                 </TabsTrigger>
                                 <TabsTrigger
                                     value="activity"
-                                    className="flex-1 data-[state=active]:bg-gradient-to-r data-[state=active]:from-white data-[state=active]:to-purple-600"
+                                    className="flex-1 data-[state=active]:bg-gradient-to-r data-[state=active]:from-white data-[state=active]:to-purple-600 z-50"
                                 >
                                     Activity
                                 </TabsTrigger>
