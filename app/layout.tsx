@@ -3,11 +3,13 @@ import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
+import { BackgroundRippleEffect } from '@/components/ui/background-ripple-effect'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.app',
+  title: 'Domeme',
+  icons : {
+    icon : '/domeme.jpg'
+  }
 }
 
 export default function RootLayout({
@@ -27,6 +29,17 @@ html {
         `}</style>
       </head>
       <body>
+        <BackgroundRippleEffect />
+        <div
+          className="pointer-events-none fixed inset-x-0 bottom-0 h-full 
+               -z-5"
+          style={{
+            background: `radial-gradient(ellipse at bottom,
+        rgba(6, 182, 212, 0.1),  /* cyan */
+        rgba(139, 92, 246, 0.1),   /* purple */
+        rgba(0, 0, 0, 0) 80%)`,   /* fade out */
+          }}
+        />
         {children}
         <Analytics />
       </body>

@@ -14,48 +14,21 @@ export default function WatchlistPage() {
   const coins = useMemo(() => ALL_COINS.filter((c) => watchlist.coins.includes(c.symbol)), [watchlist.coins])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-slate-900 to-slate-800 text-slate-100">
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/70 backdrop-blur-xl">
+    <div className="min-h-screen bg-black text-slate-100">
+      <header className="sticky top-0 z-50 border-b border-white/10 backdrop-blur-xl py-4">
         <div className="mx-auto max-w-6xl px-4 py-4">
           <div className="flex items-center gap-3">
             <Link href="/" className="text-slate-400 hover:text-slate-200">
               <ArrowLeft className="h-5 w-5" />
             </Link>
-            <h1 className="text-pretty text-2xl font-semibold">Your Watchlist</h1>
+            <h1 className="text-pretty text-2xl font-semibold text-purple-400">Your Watchlist</h1>
           </div>
         </div>
       </header>
 
       <main className="mx-auto max-w-6xl p-4 md:p-8">
-        <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <Card className="lg:col-span-2 border-white/10 bg-white/5 backdrop-blur-md">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-slate-100">Coins</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {coins.length === 0 ? (
-                <p className="text-slate-400">No coins yet. Add some from the marketplace.</p>
-              ) : (
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                  {coins.map((coin) => (
-                    <div key={coin.symbol} className="relative">
-                      <button
-                        onClick={() => removeCoin(coin.symbol)}
-                        className="absolute right-2 top-2 z-10 rounded-md border border-white/10 bg-white/10 p-1 text-slate-200 hover:bg-white/20"
-                        aria-label={`Remove ${coin.symbol} from watchlist`}
-                        title="Remove"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                      <MemecoinCard coin={coin} />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card className="border-white/10 bg-white/5 backdrop-blur-md">
+        <div className="mb-6">
+          <Card className="border-purple-400/30 bg-purple-300/20 backdrop-blur-md">
             <CardHeader className="pb-2">
               <CardTitle className="text-slate-100">Domains</CardTitle>
             </CardHeader>

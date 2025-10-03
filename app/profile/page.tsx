@@ -23,6 +23,7 @@ import {
   ArrowLeft,
 } from "lucide-react"
 import { TrendChart } from "@/components/trend-chart"
+import { Navbar } from "@/components/navbar"
 
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState("overview")
@@ -45,65 +46,40 @@ export default function ProfilePage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-slate-900 to-slate-800 text-slate-100">
+    <div className="min-h-screen bg-black text-slate-100">
       {/* Navigation header */}
-      <header className="sticky top-0 z-50 border-b border-slate-700/50 bg-slate-900/80 backdrop-blur-md">
-        <div className="mx-auto max-w-7xl px-4 py-4">
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/70 backdrop-blur-xl py-4 px-16">
+        <div className="mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2">
-              <div className="rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 p-2">
+              <div className="rounded-lg bg-gradient-to-br from-white to-purple-600 p-2">
                 <Sparkles className="h-5 w-5 text-white" />
               </div>
-              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-xl font-bold text-transparent">
+              <span className="bg-gradient-to-r from-white to-purple-400 bg-clip-text text-xl font-bold text-transparent md:text-4xl">
                 MemeDomains
               </span>
             </Link>
-
-            <nav className="hidden items-center gap-6 md:flex">
-              <Link href="/" className="text-sm text-slate-400 transition hover:text-slate-300">
-                Marketplace
-              </Link>
-              <Link href="/portfolio" className="text-sm text-slate-400 transition hover:text-slate-300">
-                Portfolio
-              </Link>
-              <Link href="/watchlist" className="text-sm text-slate-400 transition hover:text-slate-300">
-                Watchlist
-              </Link>
-              <Link href="/profile" className="text-sm text-cyan-400 transition hover:text-cyan-300">
-                Profile
-              </Link>
-            </nav>
-
-            <div className="flex items-center gap-3">
-              <Button variant="ghost" size="icon" className="relative text-slate-400 hover:text-slate-100">
-                <Bell className="h-5 w-5" />
-                <span className="absolute -right-1 -top-1 h-2 w-2 animate-pulse rounded-full bg-cyan-500"></span>
+            {/* <Navbar /> */}
+            <Link href="/">
+              <Button variant="ghost" className="mb-4 text-slate-400 hover:bg-purple-400">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Explore
               </Button>
-              <Link href="/profile">
-                <Button variant="ghost" size="icon" className="text-slate-400 hover:text-slate-100">
-                  <User className="h-5 w-5" />
-                </Button>
-              </Link>
-            </div>
+            </Link>
           </div>
         </div>
       </header>
 
       <main className="mx-auto max-w-7xl p-4 md:p-6">
-        <Link href="/">
-          <Button variant="ghost" className="mb-4 text-slate-400 hover:text-slate-100">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Marketplace
-          </Button>
-        </Link>
+
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {/* Profile sidebar */}
           <div className="lg:col-span-1">
-            <Card className="border-slate-700/50 bg-slate-900/50 backdrop-blur-sm">
-              <CardHeader className="border-b border-slate-700/50">
+            <Card className="border-purple-400/30 bg-slate-900/50 backdrop-blur-sm">
+              <CardHeader className="border-b border-purple-400/30">
                 <div className="flex flex-col items-center">
-                  <Avatar className="h-24 w-24 border-4 border-cyan-500/20">
+                  <Avatar className="h-24 w-24 border-4 border-purple-400/30">
                     <AvatarImage src="/crypto-user-avatar.png" alt="Alex Chen" />
                     <AvatarFallback className="bg-slate-700 text-2xl text-cyan-500">AC</AvatarFallback>
                   </Avatar>
@@ -115,19 +91,19 @@ export default function ProfilePage() {
               <CardContent className="pt-6">
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="rounded-lg border border-slate-700/50 bg-slate-800/50 p-3 text-center">
+                    <div className="rounded-lg border border-purple-400/30 bg-slate-800/50 p-3 text-center">
                       <ShoppingCart className="mx-auto mb-1 h-5 w-5 text-cyan-400" />
                       <p className="text-sm text-slate-400">Domains</p>
                       <p className="text-2xl font-bold text-cyan-400">12</p>
                     </div>
-                    <div className="rounded-lg border border-slate-700/50 bg-slate-800/50 p-3 text-center">
+                    <div className="rounded-lg border border-purple-400/30 bg-slate-800/50 p-3 text-center">
                       <Heart className="mx-auto mb-1 h-5 w-5 text-pink-400" />
                       <p className="text-sm text-slate-400">Watchlist</p>
                       <p className="text-2xl font-bold text-pink-400">8</p>
                     </div>
                   </div>
 
-                  <div className="rounded-lg border border-slate-700/50 bg-slate-800/50 p-4">
+                  <div className="rounded-lg border border-purple-400/30 bg-slate-800/50 p-4">
                     <div className="mb-2 flex items-center justify-between">
                       <p className="text-sm text-slate-400">Credits</p>
                       <DollarSign className="h-4 w-4 text-green-400" />
@@ -138,7 +114,7 @@ export default function ProfilePage() {
                     </Button>
                   </div>
 
-                  <div className="rounded-lg border border-slate-700/50 bg-slate-800/50 p-4">
+                  <div className="rounded-lg border border-purple-400/30 bg-slate-800/50 p-4">
                     <div className="mb-3 flex items-center justify-between">
                       <p className="text-sm font-medium text-slate-300">Profile Completion</p>
                       <p className="text-sm text-cyan-400">85%</p>
@@ -154,14 +130,14 @@ export default function ProfilePage() {
                   <div className="space-y-2">
                     <Button
                       variant="outline"
-                      className="w-full justify-start border-slate-700 bg-slate-800/50 text-slate-300"
+                      className="w-full justify-start border-purple-400/30 bg-slate-800/50 text-slate-300"
                     >
                       <Settings className="mr-2 h-4 w-4" />
                       Account Settings
                     </Button>
                     <Button
                       variant="outline"
-                      className="w-full justify-start border-slate-700 bg-slate-800/50 text-slate-300"
+                      className="w-full justify-start border-purple-400/30 bg-slate-800/50 text-slate-300"
                     >
                       <Bell className="mr-2 h-4 w-4" />
                       Notifications
@@ -172,7 +148,7 @@ export default function ProfilePage() {
             </Card>
 
             {/* Achievements card */}
-            <Card className="mt-6 border-slate-700/50 bg-gradient-to-br from-slate-900/50 to-purple-900/20 backdrop-blur-sm">
+            <Card className="mt-6 border-purple-400/30 bg-gradient-to-br from-slate-900/50 to-purple-900/20 backdrop-blur-sm">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-base text-slate-100">
                   <Award className="h-5 w-5 text-yellow-400" />
@@ -204,19 +180,19 @@ export default function ProfilePage() {
               <TabsList className="mb-6 w-full bg-slate-800/50 p-1">
                 <TabsTrigger
                   value="overview"
-                  className="flex-1 data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-600 data-[state=active]:to-blue-600"
+                  className="flex-1 data-[state=active]:bg-gradient-to-r data-[state=active]:from-white data-[state=active]:to-purple-600"
                 >
                   Overview
                 </TabsTrigger>
                 <TabsTrigger
                   value="domains"
-                  className="flex-1 data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-600 data-[state=active]:to-blue-600"
+                  className="flex-1 data-[state=active]:bg-gradient-to-r data-[state=active]:from-white data-[state=active]:to-purple-600"
                 >
                   My Domains
                 </TabsTrigger>
                 <TabsTrigger
                   value="activity"
-                  className="flex-1 data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-600 data-[state=active]:to-blue-600"
+                  className="flex-1 data-[state=active]:bg-gradient-to-r data-[state=active]:from-white data-[state=active]:to-purple-600"
                 >
                   Activity
                 </TabsTrigger>
@@ -224,7 +200,7 @@ export default function ProfilePage() {
 
               <TabsContent value="overview" className="space-y-6">
                 {/* Portfolio value chart */}
-                <Card className="border-slate-700/50 bg-slate-900/50 backdrop-blur-sm">
+                <Card className="border-purple-400/30 bg-slate-900/50 backdrop-blur-sm">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-slate-100">
                       <TrendingUp className="h-5 w-5 text-cyan-400" />
@@ -251,7 +227,7 @@ export default function ProfilePage() {
 
                 {/* Stats grid */}
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                  <Card className="border-slate-700/50 bg-slate-900/50 backdrop-blur-sm">
+                  <Card className="border-purple-400/30 bg-slate-900/50 backdrop-blur-sm">
                     <CardContent className="pt-6">
                       <div className="flex items-center justify-between">
                         <div>
@@ -263,7 +239,7 @@ export default function ProfilePage() {
                     </CardContent>
                   </Card>
 
-                  <Card className="border-slate-700/50 bg-slate-900/50 backdrop-blur-sm">
+                  <Card className="border-purple-400/30 bg-slate-900/50 backdrop-blur-sm">
                     <CardContent className="pt-6">
                       <div className="flex items-center justify-between">
                         <div>
@@ -275,7 +251,7 @@ export default function ProfilePage() {
                     </CardContent>
                   </Card>
 
-                  <Card className="border-slate-700/50 bg-slate-900/50 backdrop-blur-sm">
+                  <Card className="border-purple-400/30 bg-slate-900/50 backdrop-blur-sm">
                     <CardContent className="pt-6">
                       <div className="flex items-center justify-between">
                         <div>
@@ -299,7 +275,7 @@ export default function ProfilePage() {
                       {purchaseHistory.map((purchase, idx) => (
                         <div
                           key={idx}
-                          className="flex items-center justify-between rounded-lg border border-slate-700/50 bg-slate-800/50 p-4"
+                          className="flex items-center justify-between rounded-lg border border-purple-400/30 bg-slate-800/50 p-4"
                         >
                           <div className="flex items-center gap-3">
                             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600">
@@ -333,7 +309,7 @@ export default function ProfilePage() {
               </TabsContent>
 
               <TabsContent value="activity" className="space-y-4">
-                <Card className="border-slate-700/50 bg-slate-900/50 backdrop-blur-sm">
+                <Card className="border-purple-400/30 bg-slate-900/50 backdrop-blur-sm">
                   <CardHeader>
                     <CardTitle className="text-slate-100">Recent Activity</CardTitle>
                   </CardHeader>
@@ -371,7 +347,7 @@ export default function ProfilePage() {
                       ].map((activity, idx) => (
                         <div
                           key={idx}
-                          className="flex items-center gap-4 border-b border-slate-700/30 pb-4 last:border-0"
+                          className="flex items-center gap-4 border-b border-purple-400/30 pb-4 last:border-0"
                         >
                           <div className={`rounded-full bg-slate-800/50 p-2 ${activity.color}`}>
                             <activity.icon className="h-4 w-4" />

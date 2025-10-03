@@ -69,7 +69,7 @@ export function MemecoinCard({ coin }: { coin: Memecoin }) {
       whileHover={{ y: -2 }}
       whileTap={{ scale: 0.985 }}
     >
-      <Card className="group h-full overflow-hidden border-white/10 bg-white/5 backdrop-blur-md transition-all hover:border-cyan-500/40 hover:bg-white/10 hover:shadow-xl hover:shadow-cyan-500/10">
+      <Card className="group h-full overflow-hidden border-purple-500/60 shadow-purple-600 bg-white/5 backdrop-blur-md transition-all hover:border-purple-600/40 hover:bg-white/10 hover:shadow-xl hover:shadow-purple-500/10">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -132,7 +132,7 @@ export function MemecoinCard({ coin }: { coin: Memecoin }) {
         </CardHeader>
 
         <CardContent className="pt-0">
-          <div className="mb-4 rounded-lg border border-white/10 bg-white/5 p-3">
+          <div className="mb-4 rounded-lg border border-purple-400/60 bg-white/5 p-3">
             <TrendChart
               data={trendData}
               label={`${coin.symbol.toUpperCase()} trend`}
@@ -149,7 +149,7 @@ export function MemecoinCard({ coin }: { coin: Memecoin }) {
             {suggestions.slice(0, 3).map((d) => (
               <div
                 key={d}
-                className="flex items-center justify-between gap-2 rounded-md border border-white/10 bg-white/5 px-3 py-2 transition-colors hover:border-cyan-500/30 hover:bg-white/10"
+                className="flex items-center justify-between gap-2 rounded-md border border-purple-400/60 bg-white/5 px-3 py-2 transition-colors hover:border-purple-600 hover:bg-white/10"
               >
                 <span className="text-sm font-medium text-slate-300">{d}</span>
                 <div className="flex items-center gap-2">
@@ -181,7 +181,7 @@ export function MemecoinCard({ coin }: { coin: Memecoin }) {
         <CardFooter className="border-t border-white/10 pt-3 text-xs text-slate-400">
           <div className="flex w-full items-center justify-between">
             <span>Trend score</span>
-            <Badge variant="outline" className="border-slate-600 bg-white/5 font-mono text-slate-300">
+            <Badge variant="outline" className="border-slate-600 bg-white/5 font-mono text-slate-300 bg-purple-500">
               {coin.trendScore}/100
             </Badge>
           </div>
