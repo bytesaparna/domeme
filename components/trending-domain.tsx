@@ -4,8 +4,6 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Medal, TrendingUp } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { Button } from "./ui/button"
-import confetti from "canvas-confetti"
 import { TweetSection } from "./tweet-section"
 
 type DomainItem = {

@@ -4,9 +4,6 @@ import { Button } from "./ui/button"
 import confetti from "canvas-confetti"
 import { cn } from "@/lib/utils"
 
-
-
-
 const TWEETS = [
     "moon.cat 🚀 Just got listed!",
     "doge.com is trending again! 🐕",
