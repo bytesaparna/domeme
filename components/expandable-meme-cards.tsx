@@ -87,7 +87,7 @@ export default function ExpandableMemecoinDemo({ coin }: { coin: Memecoin }) {
                   className={
                     category === "Premium"
                       ? "border-cyan-500/30 bg-cyan-500/10 text-cyan-400"
-                      : category === "Not-So-Premium"
+                      : category === "Rising-Star"
                         ? "border-amber-500/30 bg-amber-500/10 text-amber-400"
                         : "border-purple-500/30 bg-purple-500/10 text-purple-400"
                   }

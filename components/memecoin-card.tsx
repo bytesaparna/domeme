@@ -18,11 +18,11 @@ export type Memecoin = {
   domains?: string[]
 }
 
-export type Category = "Premium" | "Not-So-Premium" | "Budding"
+export type Category = "Premium" | "Rising-Star" | "Budding"
 
 export function getCategory(score: number): Category {
   if (score >= 70) return "Premium"
-  if (score >= 40) return "Not-So-Premium"
+  if (score >= 40) return "Rising-Star"
   return "Budding"
 }
 
@@ -30,7 +30,7 @@ function priceForCategory(cat: Category) {
   switch (cat) {
     case "Premium":
       return "₹ 49,999+"
-    case "Not-So-Premium":
+    case "Rising-Star":
       return "₹ 9,999 – 49,999"
     default:
       return "₹ 999 – 9,999"
@@ -49,7 +49,7 @@ export function MemecoinCard({ coin }: { coin: Memecoin }) {
   const colorVar =
     category === "Premium"
       ? "hsl(var(--chart-1))"
-      : category === "Not-So-Premium"
+      : category === "Rising-Star"
         ? "hsl(var(--chart-3))"
         : "hsl(var(--chart-2))"
   const trendData = coin.sparkline.map((v, idx) => ({ label: `D${idx + 1}`, value: v }))
@@ -101,7 +101,7 @@ export function MemecoinCard({ coin }: { coin: Memecoin }) {
                     className={
                       category === "Premium"
                         ? "border-cyan-500/30 bg-cyan-500/10 text-cyan-400"
-                        : category === "Not-So-Premium"
+                        : category === "Rising-Star"
                           ? "border-amber-500/30 bg-amber-500/10 text-amber-400"
                           : "border-purple-500/30 bg-purple-500/10 text-purple-400"
                     }

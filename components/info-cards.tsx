@@ -6,14 +6,14 @@ import { FocusCards, Card as FocusCardType } from "./ui/focus-cards";
 
 export const InfoCards = () => {
   const categorySummary = useMemo(() => {
-    const counts = { Premium: 0, "Not-So-Premium": 0, Budding: 0 };
+    const counts = { Premium: 0, "Rising-Star": 0, Budding: 0 };
     ALL_COINS.forEach((c) => {
       const cat = getCategory(c.trendScore);
       counts[cat] += 1;
     });
     return [
       { label: "Premium", value: counts["Premium"] },
-      { label: "Not-So-Premium", value: counts["Not-So-Premium"] },
+      { label: "Rising-Star", value: counts["Rising-Star"] },
       { label: "Budding", value: counts["Budding"] },
     ];
   }, []);

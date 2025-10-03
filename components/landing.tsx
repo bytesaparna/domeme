@@ -134,8 +134,8 @@ export default function Landing() {
                 <section className="mt-36 px-48">
                     <div className="mb-14 flex flex-wrap items-center gap-3">
                         <span className="text-sm text-slate-400">Filter by category:</span>
-                        <div role="tablist" aria-label="Category filter" className="flex flex-wrap items-center gap-2">
-                            {(["All", "Premium", "Not-So-Premium", "Budding"] as CategoryKey[]).map((cat) => {
+                        <div role="tablist" aria-label="Category filter" className="flex flex-wrap items-center gap-2 z-50">
+                            {(["All", "Premium", "Rising-Star", "Budding"] as CategoryKey[]).map((cat) => {
                                 const selected = active === cat
                                 return (
                                     <Button
