@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
@@ -15,16 +16,17 @@ import TrendingDomainsTable from "@/components/trending-domain"
 type CategoryKey = "All" | Category
 
 export default function Landing() {
+    const router = useRouter()
     const [active, setActive] = useState<CategoryKey>("All")
-    const [searchQuery, setSearchQuery] = useState("")
-    const [aiResponse, setAiResponse] = useState("")
+    const [searchDomain, setSearchDomain] = useState("")
     const [isSearching, setIsSearching] = useState(false)
+    const [isDomainLoading, setIsDomainLoading] = useState(false)
 
     const coins = useMemo(() => {
         let filtered = active === "All" ? ALL_COINS : ALL_COINS.filter((c) => getCategory(c.trendScore) === active)
 
-        if (searchQuery.trim()) {
-            const query = searchQuery.toLowerCase()
+        if (searchDomain.trim()) {
+            const query = searchDomain.toLowerCase()
             filtered = filtered.filter(
                 (c) =>
                     c.name.toLowerCase().includes(query) ||
@@ -34,26 +36,33 @@ export default function Landing() {
         }
 
         return filtered
-    }, [active, searchQuery])
+    }, [active, searchDomain])
 
-    const handleAISearch = async () => {
-        if (!searchQuery.trim()) return
-
+    const handleSearch = async () => {
+        if (!searchDomain.trim()) return
         setIsSearching(true)
+        setIsDomainLoading(true)
         try {
-            const response = await fetch("/api/ai-search", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ query: searchQuery }),
-            })
-            const data = await response.json()
-            setAiResponse(data.text || "")
+            // Fetch domain search results
+            const domainsRes = await fetch(`/api/search-domains?name=${searchDomain}`)
+            if (domainsRes.ok) {
+                const domainsData = await domainsRes.json()
+                console.log("OK", domainsData)
+                // Navigate to search results page only after results are ready
+                router.push(`/search?name=${encodeURIComponent(searchDomain)}`)
+                return
+            } else {
+                console.log("NOT OK")
+            }
         } catch (error) {
             console.error("[v0] AI search error:", error)
         } finally {
             setIsSearching(false)
+            setIsDomainLoading(false)
         }
     }
+
+
 
     return (
         <div className="min-h-screen bg-black text-slate-100 px-10">
@@ -74,14 +83,14 @@ export default function Landing() {
                             <Input
                                 type="text"
                                 placeholder="Search domains with AI... (e.g., 'dog themed coins')"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                onKeyDown={(e) => e.key === "Enter" && handleAISearch()}
+                                value={searchDomain}
+                                onChange={(e) => setSearchDomain(e.target.value)}
+                                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                                 className="w-full border-slate-700 bg-purple-300/20 pl-10 pr-16 text-slate-100 placeholder:text-slate-500 focus:border-purple-500 focus:ring-purple-500 py-6 rounded-md"
                             />
                             <Button
-                                onClick={handleAISearch}
-                                disabled={isSearching || !searchQuery.trim()}
+                                onClick={handleSearch}
+                                disabled={isSearching || !searchDomain.trim()}
                                 className="absolute right-1 top-1/2 -translate-y-1/2 bg-purple-600 hover:from-cyan-500 hover:to-blue-500 p-2"
                             >
                                 {isSearching ? (
@@ -113,19 +122,6 @@ export default function Landing() {
                         <p className="text-pretty text-sm text-slate-300 md:text-base font-semibold">
                             Buy domains inspired by trending memecoins. AI-powered search helps you find the perfect domain instantly.
                         </p>
-                    </div>
-
-                    <div className="relative">
-                        {/* Get responses */}
-                        {aiResponse && (
-                            <div className="mt-3 rounded-lg border border-cyan-500/30 bg-slate-800/80 p-4 backdrop-blur-sm">
-                                <div className="mb-2 flex items-center gap-2">
-                                    <Sparkles className="h-4 w-4 text-cyan-400" />
-                                    <span className="text-sm font-medium text-cyan-400">AI Insights</span>
-                                </div>
-                                <p className="text-sm text-slate-300">{aiResponse}</p>
-                            </div>
-                        )}
                     </div>
                 </div>
 
