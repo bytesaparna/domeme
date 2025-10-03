@@ -1,6 +1,7 @@
 "use client";
 import React, { useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { StarField } from "./starfield";
 
 export const BackgroundRippleEffect = ({
     rows = 10,
@@ -28,6 +29,7 @@ export const BackgroundRippleEffect = ({
             )}
         >
             <div className="relative h-auto w-auto overflow-hidden">
+                <StarField count={80} />
                 <div className="pointer-events-none absolute inset-0 z-[2] h-full w-full overflow-hidden" />
                 <DivGrid
                     key={`base-${rippleKey}`}

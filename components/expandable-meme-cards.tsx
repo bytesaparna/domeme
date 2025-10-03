@@ -45,7 +45,7 @@ export default function ExpandableMemecoinDemo({ coin }: { coin: Memecoin }) {
             <motion.div
               layoutId={`card-${active.symbol}-${id}`}
               ref={ref}
-              className="w-full max-w-[600px] h-full md:h-fit md:max-h-[90%] flex flex-col sm:rounded-3xl overflow-hidden"
+              className="w-full max-w-[600px] h-full md:h-fit md:max-h-[90%] flex flex-col overflow-hidden"
             >
               {/* Close Button */}
               <button
@@ -56,7 +56,7 @@ export default function ExpandableMemecoinDemo({ coin }: { coin: Memecoin }) {
               </button>
 
               {/* Expanded Content – use MemecoinCard */}
-              <div className="bg-neutral-900 rounded-2xl p-4">
+              <div className="bg-neutral-900 p-2 rounded-xl">
                 <MemecoinCard coin={active} />
               </div>
             </motion.div>

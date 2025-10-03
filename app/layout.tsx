@@ -7,8 +7,8 @@ import { BackgroundRippleEffect } from '@/components/ui/background-ripple-effect
 
 export const metadata: Metadata = {
   title: 'Domeme',
-  icons : {
-    icon : '/domeme.jpg'
+  icons: {
+    icon: '/domeme.jpg'
   }
 }
 
@@ -31,13 +31,13 @@ html {
       <body>
         <BackgroundRippleEffect />
         <div
-          className="pointer-events-none fixed inset-x-0 bottom-0 h-full 
+          className="pointer-events-none fixed inset-x-0 bottom-0 h-full
                -z-5"
           style={{
             background: `radial-gradient(ellipse at bottom,
         rgba(6, 182, 212, 0.1),  /* cyan */
         rgba(139, 92, 246, 0.1),   /* purple */
-        rgba(0, 0, 0, 0) 80%)`,   /* fade out */
+        rgba(0, 0, 0, 0) 80%)`,
           }}
         />
         {children}

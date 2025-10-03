@@ -69,7 +69,14 @@ export function MemecoinCard({ coin }: { coin: Memecoin }) {
       whileHover={{ y: -2 }}
       whileTap={{ scale: 0.985 }}
     >
-      <Card className="group h-full overflow-hidden border-purple-500/60 shadow-purple-600 bg-white/5 backdrop-blur-md transition-all hover:border-purple-600/40 hover:bg-white/10 hover:shadow-xl hover:shadow-purple-500/10">
+      <Card
+        className="group h-full overflow-hidden border-purple-500/60 shadow-purple-600 backdrop-blur-md transition-all hover:border-purple-600/40 hover:bg-white/10 hover:shadow-xl hover:shadow-purple-500/10"
+        style={{
+          background: `radial-gradient(ellipse at bottom, 
+        rgba(139, 92, 246, 0.3),   /* purple */
+        rgba(0, 0, 0, 0) 100%)`
+        }}
+      >
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
