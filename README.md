@@ -1,30 +1,58 @@
-# meme-domains
+# 🌐 Domeme - Add trend before it trend 🚀
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+Discover, submit, and boost **the hottest meme-inspired domains** powered by blockchain data.  
+This app connects creativity with crypto culture — where **memecoin energy meets domain names**.  
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/aparnas-projects-f8482ce7/v0-meme-domains)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/F06vhSsaru9)
+![App Preview](./public/home.png)
 
-## Overview
+---
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+## ✨ Features
 
-## Deployment
+- 🐸 **Tweet-Style Domain Submission**  
+  Share the trendy memes to hype or support the related domains instantly with a clean tweet box.
+  ![App Preview](./public/tweet.png)
 
-Your project is live at:
+- 🎉 **Confetti Moments**  
+  Celebrate every new submission with **purple & white confetti explosions**.
 
-**[https://vercel.com/aparnas-projects-f8482ce7/v0-meme-domains](https://vercel.com/aparnas-projects-f8482ce7/v0-meme-domains)**
+- 📊 **Dynamic Trend Table**  
+  Rankings shuffle live as demand and boosts change, powered by **on-chain data by AI**.
 
-## Build your app
+- 🔮 **AI-Powered Search**  
+  Use natural queries like *“dog-themed coins”* or *“AI startup names”* to discover trending domains.
+  ![App Preview](./public/search.png)
 
-Continue building your app on:
+- 🎨 **Futuristic UI**  
+  Crafted with **Next.js, TailwindCSS, Framer Motion**, and glassmorphism for an immersive feel.
 
-**[https://v0.app/chat/projects/F06vhSsaru9](https://v0.app/chat/projects/F06vhSsaru9)**
+---
 
-## How It Works
+## 📚 Pages
 
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+- **Explore**: Browse trending meme domains based on there popularity as premiun, rising-star, budding. See momentum, and discover new ideas.
+  ![App Preview](./public/explore.png)
+  ![App Preview](./public/explore-card.png)
+
+
+- **Watchlist**: Track your favorite domains, monitor them, and revisit quickly.
+  ![App Preview](./public/watch.png)
+
+- **Profile**: View your domain and complete overview of your activity .
+  ![App Preview](./public/profile.png)
+
+
+---
+
+## 🛠️ Tech Stack
+
+- ⚡ **Frontend**: [Next.js](https://nextjs.org/) + [React](https://react.dev/)
+
+- 🎨 **Styling**: [TailwindCSS](https://tailwindcss.com/) + Framer Motion animations  
+
+- 🔗 **Blockchain Data**:  
+  - **Doma Subgraph API** → Fetch live domain data  
+  - **GraphQL Queries** for flexible data fetching  
+
+
+---
