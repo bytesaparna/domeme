@@ -96,10 +96,7 @@ export default function Landing() {
                                 {isSearching ? (
                                     <div className="h-6 w-6 animate-spin rounded-full border-2 border-white border-t-transparent" />
                                 ) : (
-                                    <>
-                                        {/* <Sparkles className="h-6 w-6 text-white" /> */}
-                                        <p className="text-white px-2">Search</p>
-                                    </>
+                                    <p className="text-white px-2">Search</p>
                                 )}
                             </Button>
                         </div>
