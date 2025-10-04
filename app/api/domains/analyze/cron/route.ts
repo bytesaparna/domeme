@@ -4,6 +4,7 @@ import { clickhouseService } from '../../../../../backend/database/clickhouse';
 import OpenAI from 'openai';
 
 export const dynamic = 'force-dynamic';
+export const maxDuration = 60;
 
 // Initialize OpenAI client
 const openai = new OpenAI({
@@ -160,7 +161,7 @@ export async function GET(request: NextRequest) {
         }
 
         // Get 100 domains that don't have traits yet
-        const domainsWithoutTraits = await clickhouseService.getDomainsWithoutTraits(100);
+        const domainsWithoutTraits = await clickhouseService.getDomainsWithoutTraits(50);
         const domainsToAnalyze = domainsWithoutTraits.data.map(d => d.id);
 
         if (domainsToAnalyze.length === 0) {
