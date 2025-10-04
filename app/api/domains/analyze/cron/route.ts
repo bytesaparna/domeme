@@ -21,8 +21,7 @@ interface DomainAnalysisResult {
 
 // Analyze domains batch with AI
 async function analyzeDomainsBatch(domainNames: string[]): Promise<DomainAnalysisResult[]> {
-    try {
-        const prompt = `Analyze these domain names and assign trait scores (0-100) for each domain. 
+    const prompt = `Analyze these domain names and assign trait scores (0-100) for each domain. 
         For each domain, identify the most relevant traits and assign scores based on meaning, associations, and potential use cases.
         
         Domain names: ${domainNames.join(', ')}
@@ -63,100 +62,81 @@ async function analyzeDomainsBatch(domainNames: string[]): Promise<DomainAnalysi
         - Consider cultural references, internet culture, and domain associations
         - Focus on traits that would be useful for trending/ranking algorithms`;
 
-        const completion = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
-            messages: [
-                {
-                    role: "system",
-                    content: "You are an expert domain analyst. Analyze domain names and dynamically create relevant traits with scores. Always return valid JSON array format."
-                },
-                {
-                    role: "user",
-                    content: prompt
-                }
-            ],
-            temperature: 0.3,
-            max_tokens: 20000
-        });
+    const completion = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+            {
+                role: "system",
+                content: "You are an expert domain analyst. Analyze domain names and dynamically create relevant traits with scores. Always return valid JSON array format."
+            },
+            {
+                role: "user",
+                content: prompt
+            }
+        ],
+        temperature: 0.3,
+        max_tokens: 8000
+    });
 
-        const response = completion.choices[0]?.message?.content;
-        if (!response) {
-            throw new Error('No response from OpenAI');
-        }
-
-        console.log("🤖 OpenAI response for domain analysis:", response);
-
-        // Parse the JSON response
-        const results = JSON.parse(response) as DomainAnalysisResult[];
-
-        // Validate that we got results for all domains
-        if (!Array.isArray(results) || results.length !== domainNames.length) {
-            throw new Error('Invalid response format from OpenAI');
-        }
-
-        return results;
-    } catch (error) {
-        console.error(`❌ Error analyzing domains batch:`, error);
-        // Return default results if analysis fails
-        return domainNames.map(domain => ({
-            domain,
-            traits: {}
-        }));
+    const response = completion.choices[0]?.message?.content;
+    if (!response) {
+        throw new Error('No response from OpenAI');
     }
+
+    console.log("🤖 OpenAI response for domain analysis:", response);
+
+    // Parse the JSON response
+    const results = JSON.parse(response) as DomainAnalysisResult[];
+
+    // Validate that we got results for all domains
+    if (!Array.isArray(results) || results.length !== domainNames.length) {
+        throw new Error('Invalid response format from OpenAI');
+    }
+
+    return results;
 }
 
 // Process domains with traits analysis
 async function processDomainsWithTraits(domainNames: string[]) {
-    try {
-        console.log('🤖 Starting domain trait analysis with OpenAI...');
-        console.log(`📊 Analyzing ${domainNames.length} domains: ${domainNames.join(', ')}`);
+    console.log('🤖 Starting domain trait analysis with OpenAI...');
+    console.log(`📊 Analyzing ${domainNames.length} domains: ${domainNames.join(', ')}`);
 
-        if (domainNames.length === 0) {
-            console.log('⚠️ No domains to analyze.');
-            return { processed: 0, errors: 0 };
-        }
+    if (domainNames.length === 0) {
+        console.log('⚠️ No domains to analyze.');
+        return { processed: 0, errors: 0 };
+    }
 
-        let processedCount = 0;
-        let errorCount = 0;
+    let processedCount = 0;
+    let errorCount = 0;
 
+    // Analyze batch of domains with OpenAI
+    const results = await analyzeDomainsBatch(domainNames);
+
+    // Store results in database
+    for (const result of results) {
         try {
-            // Analyze batch of domains with OpenAI
-            const results = await analyzeDomainsBatch(domainNames);
+            await clickhouseService.insertDomainTraits(result.domain, result.traits);
 
-            // Store results in database
-            for (const result of results) {
-                try {
-                    await clickhouseService.insertDomainTraits(result.domain, result.traits);
+            const significantTraits = Object.entries(result.traits)
+                .filter(([_, score]) => score > 0)
+                .map(([trait, score]) => `${trait}=${score}`);
 
-                    const significantTraits = Object.entries(result.traits)
-                        .filter(([_, score]) => score > 0)
-                        .map(([trait, score]) => `${trait}=${score}`);
+            console.log(`✅ Analyzed ${result.domain}:`,
+                significantTraits.length > 0 ? significantTraits.join(', ') : 'no significant traits');
 
-                    console.log(`✅ Analyzed ${result.domain}:`,
-                        significantTraits.length > 0 ? significantTraits.join(', ') : 'no significant traits');
-
-                    processedCount++;
-                } catch (error) {
-                    console.error(`❌ Error storing traits for ${result.domain}:`, error);
-                    errorCount++;
-                }
-            }
-
+            processedCount++;
         } catch (error) {
-            console.error(`❌ Error processing batch:`, error);
+            console.error(`❌ Error storing traits for ${result.domain}:`, error);
             errorCount++;
         }
-
-        console.log('\n🎉 Domain trait analysis completed!');
-        console.log(`📊 Processed ${processedCount} domains with AI-analyzed traits`);
-        console.log(`❌ Errors: ${errorCount}`);
-
-        return { processed: processedCount, errors: errorCount };
-
-    } catch (error) {
-        console.error('❌ Domain trait analysis failed:', error);
-        throw error;
     }
+
+    console.log('\n🎉 Domain trait analysis completed!');
+    console.log(`📊 Processed ${processedCount} domains with AI-analyzed traits`);
+    console.log(`❌ Errors: ${errorCount}`);
+
+    return { processed: processedCount, errors: errorCount };
+
 }
 
 // Vercel Cron Job - runs every 10 minutes
