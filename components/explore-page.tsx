@@ -12,6 +12,7 @@ import { Card, CardTitle } from "./ui/card"
 import { PixelatedCanvas } from "./ui/pixelated-canvas"
 import { useRouter } from "next/navigation"
 import { useAllTrendingDomains } from "@/hooks/useTrendingDomains"
+import { useWatchlist } from "@/hooks/use-watchlist"
 
 
 const CATEGORIES = [
@@ -32,11 +33,20 @@ const CATEGORIES = [
 export const ExplorePage = () => {
     const router = useRouter()
     const { data: trendingDomains } = useAllTrendingDomains(50, 24);
+    const { watchlist, addDomain, removeDomain } = useWatchlist();
 
     const handleClick = (name: string) => {
         // Navigate to search page with category name
         router.push(`/search?name=${encodeURIComponent(name)}`)
         return
+    }
+
+    const handleWatchlistToggle = (domainId: string) => {
+        if (watchlist.domains.includes(domainId)) {
+            removeDomain(domainId);
+        } else {
+            addDomain(domainId);
+        }
     }
 
     return (
@@ -99,9 +109,19 @@ export const ExplorePage = () => {
                                             <span className="text-white font-semibold">Trait Count:</span> {d.trait_count}
                                         </p>
                                     </div>
-                                    <div className="flex justify-end mb-2">
+                                    <div className="flex gap-4 justify-end mb-2">
+                                    <Button 
+                                            onClick={() => handleWatchlistToggle(d.domain_id)}
+                                            className={`text-xs font-bold px-4 ${
+                                                watchlist.domains.includes(d.domain_id)
+                                                    ? 'bg-green-600 hover:bg-green-700 text-white'
+                                                    : 'bg-purple-200 hover:bg-purple-300 text-black'
+                                            }`}
+                                        >
+                                            {watchlist.domains.includes(d.domain_id) ? '✓ Watching' : 'Watch'}
+                                        </Button>
                                         <Link href={`https://dashboard-testnet.doma.xyz/domain/${d.domain_id}`} target="blank"> 
-                                            <Button className=" bg-purple-600 text-white text-xs font-bold px-6">
+                                            <Button className=" bg-purple-500 hover:bg-purple-600 text-white text-xs font-bold px-6">
                                                 Buy
                                             </Button>
                                         </Link>
