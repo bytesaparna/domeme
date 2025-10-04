@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/domains/analyze/cron",
+      "schedule": "*/10 * * * *"
+    },
+    {
+      "path": "/api/domains/populate/cron",
+      "schedule": "*/30 * * * *"
+    }
+  ]
+}

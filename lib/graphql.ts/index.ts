@@ -5,7 +5,7 @@ export class Subgraph {
 
 
     constructor() {
-        this.client = new GraphQLClient(process.env.DOMA_SUBGRAPH_API_URL!, {
+        this.client = new GraphQLClient(process.env.DOMA_GQL_URL!, {
             headers: {
                 "API-Key": process.env.DOMA_API_KEY!,
                 "Content-Type": "application/json",
@@ -13,34 +13,27 @@ export class Subgraph {
         });
     }
 
-    async searchDomains(skip: number, take: number, name: string) {
+    async searchDomains(skip: number, take: number, name?: string, sortBy?: "DOMAIN" | "EXPIRES_AT" | "VALUE") {
         console.log("🔍 Searching for domains:", name);
         const query = gql`
-        query GetTokenizedNames ($skip: Int, $take: Int, $name: String!) {
-      names(skip: $skip, take: $take, name: $name) {
+        query GetTokenizedNames ($skip: Int, $take: Int, $name: String, $sortBy: String) {
+      names(skip: $skip, take: $take, name: $name, sortBy: $sortBy) {
         items {
-          name
-          expiresAt
-          tokenizedAt
+            name
+            expiresAt
+            tokenizedAt
         }
+        totalCount
+        pageSize
+        currentPage
+        totalPages
+        hasPreviousPage
+        hasNextPage
       }
     }
         `;
-        try {
-            console.log("🔍 Requesting domains:", { skip, take, name });
-            const data: any = await this.client.request(query, { skip, take, name });
-            console.log("🔍 Domains received:", data.names.items);
-            const tokenizedNames = data.names.items.map((item: any) => ({
-                name: item.name,
-                expiresAt: item.expiresAt,
-                tokenizedAt: item.tokenizedAt,
-            }));
-            console.log("🔍 Domains mapped:", tokenizedNames);
-            return tokenizedNames;
-        } catch (error) {
-            console.error("❌ Error searching domains:", error);
-            return [];
-        }
+        const data = await this.client.request(query, { skip, take, name, sortBy }) as { names: { items: { name: string, expiresAt: string, tokenizedAt: string }[], totalCount: number, pageSize: number, currentPage: number, totalPages: number, hasPreviousPage: boolean, hasNextPage: boolean } };
+        return data.names;
     }
 
 

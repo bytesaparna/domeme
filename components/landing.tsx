@@ -4,6 +4,7 @@ import TrendingDomainsTable from "@/components/trending-domain"
 import InfoSection from "./info-section"
 import Footer from "./footer"
 import { Header } from "./header"
+import { TweetSection } from "./tweet-section"
 
 export default function Landing() {
     return (
@@ -25,8 +26,12 @@ export default function Landing() {
                         </p>
                     </div>
                 </div>
-                {/* Trending doamin table */}
-                <TrendingDomainsTable />
+                <div className="flex flex-col gap-4 md:flex-row ">
+                    {/* Trending doamin table */}
+                    <TrendingDomainsTable />
+                    {/* Tweet Section */}
+                    <TweetSection />
+                </div>
             </motion.main>
             <div className="py-32">
                 <InfoSection />

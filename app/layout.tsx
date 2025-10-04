@@ -4,6 +4,7 @@ import { GeistMono } from 'geist/font/mono'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { BackgroundRippleEffect } from '@/components/ui/background-ripple-effect'
+import { QueryProvider } from '@/components/query-provider'
 
 export const metadata: Metadata = {
   title: 'Domeme',
@@ -40,7 +41,9 @@ html {
         rgba(0, 0, 0, 0) 80%)`,
           }}
         />
-        {children}
+        <QueryProvider>
+          {children}
+        </QueryProvider>
         <Analytics />
       </body>
     </html>
