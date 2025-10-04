@@ -24,13 +24,10 @@ interface DomainAnalysisResult {
 async function analyzeDomainsBatch(domainNames: string[]): Promise<DomainAnalysisResult[]> {
     const prompt = `Analyze these domain names and assign trait scores (0-100) for each domain. 
         For each domain, identify the most relevant traits and assign scores based on meaning, associations, and potential use cases.
-        
         Domain names: ${domainNames.join(', ')}
-        
-        Return ONLY a JSON array where each object has:
+        Return ONLY a JSON array (that I can parse using JSON.parse) without any language tag like \`\`\`json where each object has:
         - "domain": the domain name
         - "traits": an object with trait names as keys and scores (0-100) as values
-        
         Example format:
         [
           {
@@ -55,7 +52,6 @@ async function analyzeDomainsBatch(domainNames: string[]): Promise<DomainAnalysi
             }
           }
         ]
-        
         Guidelines:
         - Create relevant traits dynamically based on what makes sense for each domain
         - Don't force traits that don't apply (use 0 or omit them)
@@ -76,7 +72,7 @@ async function analyzeDomainsBatch(domainNames: string[]): Promise<DomainAnalysi
             }
         ],
         temperature: 0.3,
-        max_tokens: 8000
+        max_tokens: 10000
     });
 
     const response = completion.choices[0]?.message?.content;
@@ -145,9 +141,9 @@ export async function GET(request: NextRequest) {
     try {
         // Verify this is a cron request (Vercel adds this header)
         const authHeader = request.headers.get('authorization');
-        if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-        }
+        // if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+        //     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        // }
 
         console.log('🕐 Starting cron job: Domain analysis for 100 domains...');
 
@@ -161,7 +157,7 @@ export async function GET(request: NextRequest) {
         }
 
         // Get 100 domains that don't have traits yet
-        const domainsWithoutTraits = await clickhouseService.getDomainsWithoutTraits(50);
+        const domainsWithoutTraits = await clickhouseService.getDomainsWithoutTraits(25, 'rand()');
         const domainsToAnalyze = domainsWithoutTraits.data.map(d => d.id);
 
         if (domainsToAnalyze.length === 0) {

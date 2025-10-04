@@ -188,7 +188,7 @@ export class ClickHouseService {
     }
 
     // Get all domains that don't have any traits yet
-    async getDomainsWithoutTraits(limit: number = 1000) {
+    async getDomainsWithoutTraits(limit: number = 1000, order_by = 'id') {
         // If domain_traits is empty, LEFT JOIN with NULL condition may not work as expected in ClickHouse.
         // Instead, use an anti-join with NOT IN for better reliability.
         const result = await this.client.query({
@@ -196,7 +196,7 @@ export class ClickHouseService {
                 SELECT *
                 FROM domains
                 WHERE id NOT IN (SELECT domain_id FROM domain_traits)
-                ORDER BY id
+                ORDER BY ${order_by}
                 LIMIT {limit:UInt32}
             `,
             query_params: { limit },

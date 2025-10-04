@@ -15,24 +15,11 @@ export const Header = () => {
     const handleSearch = async () => {
         if (!searchDomain.trim()) return
         setIsSearching(true)
-        try {
-            // Fetch domain search results
-            const domainsRes = await fetch(`/api/search-domains?name=${searchDomain}`)
-            if (domainsRes.ok) {
-                const domainsData = await domainsRes.json()
-                console.log("OK", domainsData)
-                // Navigate to search results page only after results are ready
-                router.push(`/search?name=${encodeURIComponent(searchDomain)}`)
-                return
-            } else {
-                console.log("NOT OK")
-            }
-        } catch (error) {
-            console.error("[v0] AI search error:", error)
-        } finally {
-            setIsSearching(false)
-        }
+        // Navigate to search page 
+        router.push(`/search?name=${encodeURIComponent(searchDomain)}`)
+        return
     }
+
     return (
         <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/70 backdrop-blur-xl py-4">
             <div className="mx-auto px-4 py-4">

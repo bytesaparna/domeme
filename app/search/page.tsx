@@ -1,5 +1,6 @@
 import { Header } from "@/components/header"
 import { Button } from "@/components/ui/button"
+import { useTrendingDomainsSearch } from "@/hooks/useTrendingDomains"
 import { Subgraph } from "@/lib/graphql.ts"
 
 type SearchPageProps = {
@@ -9,11 +10,14 @@ type SearchPageProps = {
 export default async function SearchPage({ searchParams }: SearchPageProps) {
     const nameParam = typeof searchParams?.name === "string" ? searchParams?.name : ""
 
+    const { data: domainSearchData,isLoading,isError } = useTrendingDomainsSearch(nameParam)
+    console.log(domainSearchData?.domains, "DOMAINS")
+
     let domains: { name: string; expiresAt: string; tokenizedAt: string }[] = []
-    if (nameParam) {
-        const subgraphService = new Subgraph()
-        domains = await subgraphService.searchDomains(0, 10, nameParam)
-    }
+    // if (nameParam) {
+    //     const subgraphService = new Subgraph()
+    //     domains = await subgraphService.searchDomains(0, 10, nameParam)
+    // }
 
     return (
         <div className="min-h-screen bg-black text-slate-100 z-50">
