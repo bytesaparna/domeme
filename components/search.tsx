@@ -2,6 +2,7 @@
 import { useTrendingDomainsSearch } from "@/hooks/useTrendingDomains"
 import { Header } from "./header"
 import { Button } from "./ui/button"
+import Link from "next/link"
 
 type SearchProps = {
     name: string
@@ -42,7 +43,9 @@ export const Search = ({ name }: SearchProps) => {
                                     <span className="text-xs text-gray-400">Trait counts</span>
                                     <span className="text-slate-200 whitespace-nowrap">{d.trait_count}</span>
                                 </div>
-                                <Button className="bg-purple-400 px-6 z-50">Buy</Button>
+                                <Link href={`https://dashboard-testnet.doma.xyz/domain/${d.domain_id}`} target="blank">
+                                    <Button className="bg-purple-400 px-6 z-50">Buy</Button>
+                                </Link>
                             </li>
                         ))}
                     </ul>

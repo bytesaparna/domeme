@@ -20,7 +20,7 @@ function MedalIcon({ rank }: { rank: number }) {
   return null
 }
 export default function TrendingDomainsTable() {
-  const { data: trendingDomains } = useAllTrendingDomains(10, 24);
+  const { data: trendingDomains } = useAllTrendingDomains(8, 24);
 
   console.log(trendingDomains);
 

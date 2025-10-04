@@ -8,29 +8,37 @@ import ExpandableMemecoinDemo from "./expandable-meme-cards"
 import { ArrowLeft, ArrowLeftSquare } from "lucide-react"
 import Link from "next/link"
 import { Header } from "./header"
+import { Card, CardTitle } from "./ui/card"
+import { PixelatedCanvas } from "./ui/pixelated-canvas"
+import { useRouter } from "next/navigation"
+import { useAllTrendingDomains } from "@/hooks/useTrendingDomains"
 
-type CategoryKey = "All" | Category
+
+const CATEGORIES = [
+    {
+        name: "AI",
+        imageUrl: "/ai.png",
+    },
+    {
+        name: "Football",
+        imageUrl: "/football.png",
+    },
+    {
+        name: "Ape",
+        imageUrl: "/beauty.png",
+    },
+]
 
 export const ExplorePage = () => {
-    const [active, setActive] = useState<CategoryKey>("All")
-    const [searchDomain, setSearchDomain] = useState("")
+    const router = useRouter()
+    const { data: trendingDomains } = useAllTrendingDomains(50, 24);
 
+    const handleClick = (name: string) => {
+        // Navigate to search page with category name
+        router.push(`/search?name=${encodeURIComponent(name)}`)
+        return
+    }
 
-    const coins = useMemo(() => {
-        let filtered = active === "All" ? ALL_COINS : ALL_COINS.filter((c) => getCategory(c.trendScore) === active)
-
-        if (searchDomain.trim()) {
-            const query = searchDomain.toLowerCase()
-            filtered = filtered.filter(
-                (c) =>
-                    c.name.toLowerCase().includes(query) ||
-                    c.symbol.toLowerCase().includes(query) ||
-                    c.domains?.some((d) => d.toLowerCase().includes(query)),
-            )
-        }
-
-        return filtered
-    }, [active, searchDomain])
     return (
         <div className="bg-black min-h-screen">
             <Header />
@@ -40,60 +48,70 @@ export const ExplorePage = () => {
                 transition={{ duration: 0.4, ease: "easeOut" }}
                 className="p-4 md:px-8"
             >
-
-                <section className="mt-10 px-48">
-
-                    <div className="mb-14 flex flex-wrap items-center gap-3">
-                        <span className="text-sm text-slate-400">Filter by category:</span>
-                        <div role="tablist" aria-label="Category filter" className="flex flex-wrap items-center gap-2 z-50">
-                            {(["All", "Premium", "Rising-Star", "Budding"] as CategoryKey[]).map((cat) => {
-                                const selected = active === cat
-                                return (
-                                    <Button
-                                        key={cat}
-                                        variant={selected ? "default" : "outline"}
-                                        size="sm"
-                                        role="tab"
-                                        aria-selected={selected}
-                                        onClick={() => setActive(cat)}
-                                        className={
-                                            selected
-                                                ? "border-cyan-500/50 bg-purple-500 hover:from-cyan-500 hover:to-blue-500"
-                                                : "border-slate-700 bg-slate-800/50 text-slate-300 hover:border-slate-600 hover:bg-purple-400/50"
-                                        }
-                                    >
-                                        {cat}
-                                    </Button>
-                                )
-                            })}
+                <div className="my-12 flex flex-col gap-24 px-8 md:px-16 lg:px-48">
+                    <section >
+                        <h2 className="text-purple-300 text-3xl font-bold mb-8">
+                            Trending Categories
+                        </h2>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                            {CATEGORIES.map((c) => (
+                                <div
+                                    key={c.name}
+                                    onClick={() => handleClick(c.name)}
+                                    className="cursor-pointer transform transition-transform hover:scale-105 hover:shadow-xl rounded-xl overflow-hidden border border-purple-500/30 shadow-lg text-center"
+                                >
+                                    <img
+                                        src={c.imageUrl}
+                                        alt={c.name}
+                                        className="w-full h-72 object-cover rounded-t-xl"
+                                    />
+                                    <div className="py-4">
+                                        <span className="text-white text-xl sm:text-2xl font-semibold">
+                                            {c.name}
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                        <div className="ml-auto mr-6">
-                            <Badge variant="outline" className="border-slate-700 bg-slate-800/50 text-slate-400">
-                                {coins.length} domains
-                            </Badge>
-                        </div>
-                        <div className="z-50">
-                            <Link href="/">
-                                <Button variant="ghost" className=" text-slate-400 hover:bg-purple-400 realtive">
-                                    <ArrowLeft className="mr-1 h-4 w-4" />
-                                    Back to Home
-                                </Button>
-                            </Link>
-                        </div>
-                    </div>
+                    </section>
+                    <section className="mt-12">
+                        <h2 className="text-purple-300 text-3xl font-bold mb-8">
+                            Trending Domains
+                        </h2>
 
-                    <div>
-                        {coins.map((coin) => (
-                            <ExpandableMemecoinDemo key={coin.symbol} coin={coin} />
-                        ))}
-                    </div>
-
-                    {coins.length === 0 && (
-                        <div className="rounded-lg border border-slate-700/50 bg-slate-900/50 p-12 text-center backdrop-blur-sm">
-                            <p className="text-slate-400">No domains found matching your search.</p>
+                        <div className="relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                            {trendingDomains?.domains.map((d) => (
+                                <div
+                                    key={d.domain_id}
+                                    className="bg-gray-900/5 border border-purple-400/30 rounded-2xl p-6 cursor-pointer hover:shadow-xl transition-shadow duration-300"
+                                >
+                                    <h3 className="text-white text-2xl font-bold mb-4 truncate">
+                                        {d.domain_id}
+                                    </h3>
+                                    <div className="text-gray-400 text-sm space-y-1">
+                                        <p>
+                                            <span className="text-white font-semibold">Score:</span> {d.total_score}
+                                        </p>
+                                        <p>
+                                            <span className="text-white font-semibold">Tweet Mentions:</span> {d.total_tweet_mentions}
+                                        </p>
+                                        <p>
+                                            <span className="text-white font-semibold">Trait Count:</span> {d.trait_count}
+                                        </p>
+                                    </div>
+                                    <div className="flex justify-end mb-2">
+                                        <Link href={`https://dashboard-testnet.doma.xyz/domain/${d.domain_id}`} target="blank"> 
+                                            <Button className=" bg-purple-600 text-white text-xs font-bold px-6">
+                                                Buy
+                                            </Button>
+                                        </Link>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                    )}
-                </section>
+                    </section>
+
+                </div>
             </motion.main>
         </div>
     )
