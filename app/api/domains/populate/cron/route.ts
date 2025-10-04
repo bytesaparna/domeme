@@ -4,6 +4,8 @@ import { Subgraph } from '../../../../../lib/graphql.ts';
 
 
 export const dynamic = 'force-dynamic';
+export const maxDuration = 60;
+
 
 // Vercel Cron Job - runs every 30 minutes to populate new domains
 export async function GET(request: NextRequest) {
