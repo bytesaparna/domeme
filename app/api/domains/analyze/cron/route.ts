@@ -141,9 +141,9 @@ export async function GET(request: NextRequest) {
     try {
         // Verify this is a cron request (Vercel adds this header)
         const authHeader = request.headers.get('authorization');
-        // if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-        //     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-        // }
+        if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
 
         console.log('🕐 Starting cron job: Domain analysis for 100 domains...');
 
