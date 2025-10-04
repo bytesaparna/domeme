@@ -16,7 +16,7 @@ export class Subgraph {
     async searchDomains(skip: number, take: number, name?: string, sortBy?: "DOMAIN" | "EXPIRES_AT" | "VALUE") {
         console.log("🔍 Searching for domains:", name);
         const query = gql`
-        query GetTokenizedNames ($skip: Int, $take: Int, $name: String, $sortBy: String) {
+        query GetTokenizedNames ($skip: Int, $take: Int, $name: String, $sortBy: NamesQuerySortBy) {
       names(skip: $skip, take: $take, name: $name, sortBy: $sortBy) {
         items {
             name
