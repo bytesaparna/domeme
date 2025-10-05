@@ -26,13 +26,13 @@ interface UseTrendingDomainsParams {
 
 async function fetchTrendingDomains(params: UseTrendingDomainsParams): Promise<TrendingDomainsResponse> {
   const searchParams = new URLSearchParams();
-  
+
   if (params.limit) searchParams.set('limit', params.limit.toString());
   if (params.hours) searchParams.set('hours', params.hours.toString());
   if (params.search) searchParams.set('search', params.search);
 
   const response = await fetch(`/api/domains/trending?${searchParams.toString()}`);
-  
+
   if (!response.ok) {
     throw new Error(`Failed to fetch trending domains: ${response.statusText}`);
   }
@@ -58,6 +58,7 @@ export function useTrendingDomains(params: UseTrendingDomainsParams = {}) {
     refetchOnMount: true,
     retry: 3,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+    refetchInterval: 5 * 1000, // 5 seconds
   });
 }
 
@@ -83,19 +84,19 @@ export function useAllTrendingDomains(limit?: number, hours?: number) {
 // Hook for invalidating trending domains cache
 export function useInvalidateTrendingDomains() {
   const queryClient = useQueryClient();
-  
+
   return {
     invalidateAll: () => {
       queryClient.invalidateQueries({ queryKey: ['trending-domains'] });
     },
     invalidateSearch: (searchQuery: string) => {
-      queryClient.invalidateQueries({ 
-        queryKey: ['trending-domains', { search: searchQuery }] 
+      queryClient.invalidateQueries({
+        queryKey: ['trending-domains', { search: searchQuery }]
       });
     },
     invalidateParams: (limit: number, hours: number, search?: string) => {
-      queryClient.invalidateQueries({ 
-        queryKey: ['trending-domains', { limit, hours, search }] 
+      queryClient.invalidateQueries({
+        queryKey: ['trending-domains', { limit, hours, search }]
       });
     }
   };

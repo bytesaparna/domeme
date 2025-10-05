@@ -8,7 +8,7 @@ export interface TotalDomainsAnalyzedResponse {
 
 async function fetchTotalDomainsAnalyzed(): Promise<TotalDomainsAnalyzedResponse> {
   const response = await fetch('/api/domains/analyze');
-  
+
   if (!response.ok) {
     throw new Error(`Failed to fetch total domains analyzed: ${response.statusText}`);
   }
@@ -26,6 +26,7 @@ export function useTotalDomainsAnalyzed() {
     refetchOnMount: true,
     retry: 3,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+    refetchInterval: 5000
   });
 }
 
