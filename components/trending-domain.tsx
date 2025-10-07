@@ -5,6 +5,7 @@ import { Medal, TrendingUp } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { TweetSection } from "./tweet-section"
 import { useAllTrendingDomains } from "@/hooks/useTrendingDomains"
+import Link from "next/link"
 
 
 function MedalIcon({ rank }: { rank: number }) {
@@ -97,16 +98,18 @@ export default function TrendingDomainsTable() {
                     </td>
                     <td className="px-4 py-3 md:px-6 md:py-4">
                       <div className="flex items-center gap-2">
-                        <button
-                          className={cn(
-                            "px-2.5 py-1.5 rounded-md text-xs font-medium",
-                            "border border-white/10 bg-white/[0.02] hover:bg-white/[0.06] transition-colors",
-                            "backdrop-blur-md",
-                          )}
-                          aria-label={`Boost visibility for ${d.domain_id}`}
-                        >
-                          Boost
-                        </button>
+                        <Link href={`https://dashboard-testnet.doma.xyz/domain/${d.domain_id}`} target="blank">
+                          <button
+                            className={cn(
+                              "px-2.5 py-1.5 rounded-md text-xs font-medium",
+                              "border border-white/10 bg-white/[0.02] hover:bg-white/[0.06] transition-colors",
+                              "backdrop-blur-md",
+                            )}
+                            aria-label={`Boost visibility for ${d.domain_id}`}
+                          >
+                            Buy
+                          </button>
+                        </Link>
                       </div>
                     </td>
                   </motion.tr>

@@ -334,16 +334,73 @@ export class ClickHouseService {
           LEFT JOIN recent_tweet_traits rtt ON dt.trait = rtt.trait
           JOIN domains d ON dt.domain_id = d.id
           WHERE 1=1 ${domainFilter}
+        ),
+        aggregated_scores AS (
+          SELECT 
+            domain_id,
+            SUM(combined_score) as total_score,
+            COUNT(DISTINCT ds.trait) as trait_count,
+            SUM(tweet_count) as total_tweet_mentions
+          FROM domain_scores ds
+          GROUP BY domain_id
+          HAVING total_score > 0
+        ),
+        domain_quality AS (
+          SELECT 
+            domain_id,
+            total_score,
+            trait_count,
+            total_tweet_mentions,
+            -- Extract domain name without TLD (e.g., 'pepe123.com' -> 'pepe123')
+            SUBSTRING(domain_id, 1, POSITION('.' IN domain_id) - 1) as domain_name,
+            -- Calculate alphabetic ratio (higher is better)
+            length(replaceRegexpAll(SUBSTRING(domain_id, 1, POSITION('.' IN domain_id) - 1), '[^a-zA-Z]', '')) / 
+            GREATEST(length(SUBSTRING(domain_id, 1, POSITION('.' IN domain_id) - 1)), 1) as alphabetic_ratio,
+            -- Calculate numeric count (lower is better)
+            length(replaceRegexpAll(SUBSTRING(domain_id, 1, POSITION('.' IN domain_id) - 1), '[^0-9]', '')) as numeric_count
+          FROM aggregated_scores
+        ),
+        scored_domains AS (
+          SELECT 
+            domain_id,
+            total_score,
+            trait_count,
+            total_tweet_mentions,
+            alphabetic_ratio,
+            numeric_count,
+            -- Quality multiplier: favor purely alphabetic domains
+            -- Domains with 100% alphabetic get 1.0x, domains with numbers get exponentially lower multipliers
+            CASE 
+              WHEN alphabetic_ratio = 1 THEN 1.0
+              WHEN alphabetic_ratio >= 0.8 THEN POW(alphabetic_ratio, 2)
+              WHEN alphabetic_ratio >= 0.6 THEN POW(alphabetic_ratio, 3)
+              ELSE POW(alphabetic_ratio, 4)
+            END as quality_multiplier
+          FROM domain_quality
+          WHERE alphabetic_ratio >= 0.5  -- Filter out domains with less than 50% alphabetic characters
+        ),
+        normalized_scores AS (
+          SELECT 
+            domain_id,
+            total_score,
+            trait_count,
+            total_tweet_mentions,
+            alphabetic_ratio,
+            quality_multiplier,
+            -- Normalize using min-max normalization within the result set
+            (total_score - MIN(total_score) OVER ()) / 
+            GREATEST((MAX(total_score) OVER () - MIN(total_score) OVER ()), 0.0001) as normalized_score
+          FROM scored_domains
         )
         SELECT 
           domain_id,
-          SUM(combined_score) as total_score,
-          COUNT(DISTINCT ds.trait) as trait_count,
-          SUM(tweet_count) as total_tweet_mentions
-        FROM domain_scores ds
-        GROUP BY domain_id
-        HAVING total_score > 0
-        ORDER BY total_score DESC
+          total_score,
+          trait_count,
+          total_tweet_mentions,
+          -- Final weighted score: combine normalized score with quality multiplier
+          (normalized_score * 0.7 + quality_multiplier * 0.3) * total_score as final_score
+        FROM normalized_scores
+        ORDER BY final_score DESC
         LIMIT {limit:UInt32}
       `,
             query_params: {
@@ -361,16 +418,54 @@ export class ClickHouseService {
 
             const fallbackResult = await this.client.query({
                 query: `
+                    WITH domain_quality AS (
+                        SELECT 
+                            dt.domain_id,
+                            SUM(dt.score) as total_score,
+                            COUNT(DISTINCT dt.trait) as trait_count,
+                            -- Calculate alphabetic ratio
+                            length(replaceRegexpAll(SUBSTRING(dt.domain_id, 1, POSITION('.' IN dt.domain_id) - 1), '[^a-zA-Z]', '')) / 
+                            GREATEST(length(SUBSTRING(dt.domain_id, 1, POSITION('.' IN dt.domain_id) - 1)), 1) as alphabetic_ratio
+                        FROM domain_traits dt
+                        JOIN domains d ON dt.domain_id = d.id
+                        WHERE 1=1 ${domainFilter}
+                        GROUP BY dt.domain_id
+                    ),
+                    scored_domains AS (
+                        SELECT 
+                            domain_id,
+                            total_score,
+                            trait_count,
+                            0 as total_tweet_mentions,
+                            -- Quality multiplier
+                            CASE 
+                              WHEN alphabetic_ratio = 1 THEN 1.0
+                              WHEN alphabetic_ratio >= 0.8 THEN POW(alphabetic_ratio, 2)
+                              WHEN alphabetic_ratio >= 0.6 THEN POW(alphabetic_ratio, 3)
+                              ELSE POW(alphabetic_ratio, 4)
+                            END as quality_multiplier
+                        FROM domain_quality
+                        WHERE alphabetic_ratio >= 0.5
+                    ),
+                    normalized_scores AS (
+                        SELECT 
+                            domain_id,
+                            total_score,
+                            trait_count,
+                            total_tweet_mentions,
+                            quality_multiplier,
+                            (total_score - MIN(total_score) OVER ()) / 
+                            GREATEST((MAX(total_score) OVER () - MIN(total_score) OVER ()), 0.0001) as normalized_score
+                        FROM scored_domains
+                    )
                     SELECT 
-                        dt.domain_id,
-                        SUM(dt.score) as total_score,
-                        COUNT(DISTINCT dt.trait) as trait_count,
-                        0 as total_tweet_mentions
-                    FROM domain_traits dt
-                    JOIN domains d ON dt.domain_id = d.id
-                    WHERE 1=1 ${domainFilter}
-                    GROUP BY dt.domain_id
-                    ORDER BY total_score DESC
+                        domain_id,
+                        total_score,
+                        trait_count,
+                        total_tweet_mentions,
+                        (normalized_score * 0.7 + quality_multiplier * 0.3) * total_score as final_score
+                    FROM normalized_scores
+                    ORDER BY final_score DESC
                     LIMIT {limit:UInt32}
                 `,
                 query_params: {

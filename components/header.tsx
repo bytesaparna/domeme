@@ -10,14 +10,10 @@ import { useRouter } from "next/navigation"
 export const Header = () => {
     const router = useRouter()
     const [searchDomain, setSearchDomain] = useState("")
-    const [isSearching, setIsSearching] = useState(false)
 
     const handleSearch = async () => {
         if (!searchDomain.trim()) return
-        setIsSearching(true)
-        // Navigate to search page 
         router.push(`/search?name=${encodeURIComponent(searchDomain)}`)
-        return
     }
 
     return (
@@ -44,14 +40,10 @@ export const Header = () => {
                         />
                         <Button
                             onClick={handleSearch}
-                            disabled={isSearching || !searchDomain.trim()}
+                            disabled={!searchDomain.trim()}
                             className="absolute right-1 top-1/2 -translate-y-1/2 bg-purple-600 hover:from-cyan-500 hover:to-blue-500 p-2"
                         >
-                            {isSearching ? (
-                                <div className="h-6 w-6 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                            ) : (
-                                <p className="text-white px-2">Search</p>
-                            )}
+                            <p className="text-white px-2">Search</p>
                         </Button>
                     </div>
                     <Navbar />

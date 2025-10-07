@@ -77,9 +77,6 @@ export const TweetSection = () => {
                             key={index}
                             className="flex items-start gap-3 bg-white/5 backdrop-blur-md rounded-xl p-2 border border-white/10 py-4"
                         >
-                            <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white text-xs font-bold">
-                                T
-                            </div>
                             <p className="text-sm text-white">{tweet.content}</p>
                         </div>
                     ))}

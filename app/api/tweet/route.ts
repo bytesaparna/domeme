@@ -20,7 +20,7 @@ async function getUniqueTraits(): Promise<string[]> {
                 SELECT DISTINCT trait 
                 FROM domain_traits 
                 ORDER BY rand()
-                LIMIT 500
+                LIMIT 100
             `
         });
         const data = await result.json<{ trait: string }>();
@@ -38,7 +38,7 @@ async function analyzeTweetWithTraits(tweetContent: string, availableTraits: str
 
 Tweet content: "${tweetContent}"
 
-Example traits: ${availableTraits.join(', ')}
+Example traits (Don't limit yourself to these traits): ${availableTraits.join(', ')}
 
 For each trait, assign a score from 0-100 based on how well the tweet content matches that trait:
 - 0-20: No relevance or very weak connection
@@ -64,7 +64,7 @@ Guidelines:
 - Focus on the actual content and sentiment of the tweet`;
 
         const completion = await openai.chat.completions.create({
-            model: "gpt-5-nano",
+            model: "gpt-4o-mini",
             messages: [
                 {
                     role: "system",
@@ -75,8 +75,8 @@ Guidelines:
                     content: prompt
                 }
             ],
-            max_completion_tokens: 128000,
-            service_tier: 'flex',
+            // max_completion_tokens: 128000,
+            // service_tier: 'flex',
             n: 1,
             response_format: {
                 type: "json_schema",
